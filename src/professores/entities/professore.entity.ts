@@ -1,8 +1,8 @@
 import { Sala } from 'src/salas/entities/sala.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-@Entity('alunos')
-export class Aluno {
+@Entity('professores')
+export class Professore {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,6 +18,6 @@ export class Aluno {
   @Column()
   dataNascimento: Date;
 
-  @ManyToMany(() => Sala, (sala) => sala.alunos)
+  @OneToMany(() => Sala, (sala) => sala.professor)
   salas: Sala[];
 }

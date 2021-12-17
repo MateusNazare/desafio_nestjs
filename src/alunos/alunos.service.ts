@@ -1,26 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Aluno } from './entities/aluno.entity';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AlunosService {
-  create(createAlunoDto: CreateAlunoDto) {
-    return 'This action adds a new aluno';
+  constructor(
+    @InjectRepository(Aluno)
+    private alunosRepository: Repository<Aluno>,
+  ) {}
+
+  async create(createAlunoDto: CreateAlunoDto) {
+    const aluno = this.alunosRepository.create(createAlunoDto);
+    await this.alunosRepository.save(aluno);
+    return aluno;
   }
 
-  findAll() {
-    return `This action returns all alunos`;
+  async findOne(id: number) {
+    const aluno = await this.alunosRepository.findOne(id);
+    return aluno;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} aluno`;
+  async update(id: number, updateAlunoDto: UpdateAlunoDto) {
+    return await this.alunosRepository.update(id, updateAlunoDto);
   }
 
-  update(id: number, updateAlunoDto: UpdateAlunoDto) {
-    return `This action updates a #${id} aluno`;
+  async remove(id: number) {
+    return await this.alunosRepository.delete(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} aluno`;
+  async findAllSalas(id: number) {
+    const aluno = await this.alunosRepository.findOne(id, {
+      relations: ['salas', 'salas.professor'],
+    });
+
+    if (!aluno) {
+      return {
+        error: 'Este Aluno não existe',
+      };
+    }
+
+    return aluno.salas;
   }
 }

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AlunosService } from './alunos.service';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
@@ -10,11 +18,6 @@ export class AlunosController {
   @Post()
   create(@Body() createAlunoDto: CreateAlunoDto) {
     return this.alunosService.create(createAlunoDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.alunosService.findAll();
   }
 
   @Get(':id')
@@ -30,5 +33,10 @@ export class AlunosController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.alunosService.remove(+id);
+  }
+
+  @Get('/salas/:id')
+  findAllSalas(@Param('id') id: string) {
+    return this.alunosService.findAllSalas(+id);
   }
 }
